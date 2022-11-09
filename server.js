@@ -5,7 +5,7 @@
 require("dotenv").config() // load variables from .env into process.env
 const express = require('express'); // backend framework
 const fruits = require("./models/fruits") // import fruits data
-
+const morgan = require("morgan")
 
 //*************************************** */
 // Create the Express App object
@@ -14,6 +14,13 @@ const fruits = require("./models/fruits") // import fruits data
 //*************************************** */
 const app = express();
 
+//*************************************** */
+// Register Middleware with the App
+// Middleware are just functions that handle the request and response
+// object before the routes do
+//*************************************** */
+app.use(express.urlencoded({extended: true})) // parse data from form submissions into req.body
+app.use(morgan("tiny")) // logging middleware
 
 //*************************************** */
 // Routes and Routers
@@ -43,8 +50,19 @@ app.get('/fruits/new', (req, res) => {
 
 // Create Route - POST to /fruits - receive the data from the form and create a new fruit then redirect the user back to index
 app.post("/fruits", (req, res) => {
-    res.json(req.body)
-})
+    // making sure readyToEat is true or false
+    if (req.body.readyToEat === "on") {
+      req.body.readyToEat = true;
+    } else {
+      req.body.readyToEat = false;
+    }
+  
+    // push the new fruit into the fruits array
+    fruits.push(req.body)
+  
+    // redirect back to index page
+    res.redirect("/fruits")
+  });
 
 //SHOW ROUTE - GET to /fruits - Returns a single fruit
 app.get('/fruits/:index', (req, res) => {

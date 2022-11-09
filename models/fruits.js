@@ -4,17 +4,17 @@
 //*************************************** */
 const fruits = [
     {
-        name:'apple',
+        name:'Apple',
         color: 'red',
         readyToEat: true
     },
     {
-        name:'pear',
+        name:'Pear',
         color: 'green',
         readyToEat: false
     },
     {
-        name:'banana',
+        name:'Banana',
         color: 'yellow',
         readyToEat: true
     }
