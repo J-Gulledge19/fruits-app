@@ -35,6 +35,17 @@ app.get('/fruits/', (req, res) => {
     );
 });
 
+// New Route - GET to /fruits/new - render a page with a form to create a new thing
+//put this above show.ejs file to not be a problem with /:index
+app.get('/fruits/new', (req, res) => {
+    res.render('new.ejs');
+});
+
+// Create Route - POST to /fruits - receive the data from the form and create a new fruit then redirect the user back to index
+app.post("/fruits", (req, res) => {
+    res.json(req.body)
+})
+
 //SHOW ROUTE - GET to /fruits - Returns a single fruit
 app.get('/fruits/:index', (req, res) => {
     // res.render(template, data)
