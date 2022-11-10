@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+    <%- include("./partials/head.ejs"), {title: 'Edit Page'} %>
+    <body>
+        <h1>Update <%= fruit.name %></h1>
+        <form action="/fruits/<%= index %>?_method=PUT" method="POST">
+            Name: <input type="text" name="name" value="<%= fruit.name %>"> <br>
+            Color: <input type="text" name="color" value="<%= fruit.color %>"><br>
+            Is Ready to Eat: <input type="checkbox" name="readyToEat"
+            <%= fruit.readyToEat ? "checked" : "" %>
+            ><br>
+            <input type="submit" value="Update Fruit">
+        </form>
+    </body>
+</html>

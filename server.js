@@ -23,6 +23,7 @@ const app = express();
 app.use(express.urlencoded({extended: true})) // parse data from form submissions into req.body
 app.use(morgan("tiny")) // logging middleware
 app.use(methodOverride("_method")) // swap the method if the url has a ?_method=XXX query
+app.use("/static", express.static("public")) // it's going serve files from a folder called "public" under /static example public/styles.css => /static/styles.css
 
 //*************************************** */
 // Routes and Routers
@@ -66,6 +67,32 @@ app.post("/fruits", (req, res) => {
     res.redirect("/fruits");
   });
 
+// EDIT route = GET to /fruits/:id/edit - render a form to edit the fruit
+app.get("/fruits/:id/edit", (req, res) => {
+    // render edit.ejs with the existing fruits data
+    res.render("edit.ejs", {
+      fruit: fruits[req.params.id],
+      index: req.params.id
+    })
+    
+  })
+
+  // update route = PUT to /fruits/:id - update the fruit with info from a form
+app.put("/fruits/:id", (req, res) => {
+    // making sure readyToEat is true or false
+    if (req.body.readyToEat === "on") {
+      req.body.readyToEat = true;
+    } else {
+      req.body.readyToEat = false;
+    }
+  
+    // updating fruit
+    fruits[req.params.id] = req.body
+  
+    // redirect user back to index
+    res.redirect("/fruits")
+  })
+
 // DESTROY Route - DELETE to /fuits/:id - deletes the specified
 app.delete("/fruits/:id", (req, res) => {
     //splice the item out of the array
@@ -75,12 +102,13 @@ app.delete("/fruits/:id", (req, res) => {
   })
 
 //SHOW ROUTE - GET to /fruits - Returns a single fruit
-app.get('/fruits/:index', (req, res) => {
-    // res.render(template, data);
-    res.render('show.ejs', {
-        fruit: fruits[req.params.index]
+app.get("/fruits/:index", (req, res) => {
+    // res.render(template, data)
+    res.render("show.ejs", {
+      fruit: fruits[req.params.index],
+      index: req.params.index
     });
-});
+  });
 
 
 //*************************************** */
