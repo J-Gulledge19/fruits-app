@@ -4,8 +4,9 @@
 //*************************************** */
 require("dotenv").config() // load variables from .env into process.env
 const express = require('express'); // backend framework
-const fruits = require("./models/fruits") // import fruits data
-const morgan = require("morgan")
+const fruits = require("./models/fruits"); // import fruits data
+const morgan = require("morgan");
+const methodOverride = require("method-override") // import method override
 
 //*************************************** */
 // Create the Express App object
@@ -21,6 +22,7 @@ const app = express();
 //*************************************** */
 app.use(express.urlencoded({extended: true})) // parse data from form submissions into req.body
 app.use(morgan("tiny")) // logging middleware
+app.use(methodOverride("_method")) // swap the method if the url has a ?_method=XXX query
 
 //*************************************** */
 // Routes and Routers
@@ -58,15 +60,23 @@ app.post("/fruits", (req, res) => {
     }
   
     // push the new fruit into the fruits array
-    fruits.push(req.body)
+    fruits.push(req.body);
   
     // redirect back to index page
-    res.redirect("/fruits")
+    res.redirect("/fruits");
   });
+
+// DESTROY Route - DELETE to /fuits/:id - deletes the specified
+app.delete("/fruits/:id", (req, res) => {
+    //splice the item out of the array
+    fruits.splice(req.params.id, 1);
+    // redirect user back to index
+    res.redirect("/fruits");
+  })
 
 //SHOW ROUTE - GET to /fruits - Returns a single fruit
 app.get('/fruits/:index', (req, res) => {
-    // res.render(template, data)
+    // res.render(template, data);
     res.render('show.ejs', {
         fruit: fruits[req.params.index]
     });
